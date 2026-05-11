@@ -1,0 +1,7 @@
+Chr1	GenBank	gene	10	40	.	+	.	ID=gene1;Name=example_gene_1
+Chr1	GenBank	transcript	10	40	.	+	.	ID=mRNA1;Parent=gene1
+Chr1	GenBank	CDS	10	20	.	+	0	ID=cds1;Parent=mRNA1
+Chr1	GenBank	CDS	30	40	.	+	0	ID=cds2;Parent=mRNA1
+Chr2	GenBank	gene	5	35	.	-	.	ID=gene2;Name=example_gene_2
+Chr2	GenBank	transcript	5	35	.	-	.	ID=mRNA2;Parent=gene2
+Chr2	GenBank	CDS	5	35	.	-	0	ID=cds3;Parent=mRNA2

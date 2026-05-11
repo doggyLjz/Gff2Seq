@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# ==============================================================================
+# Script: Gff2Seq
+# Description: Efficiently extract sequences (Protein, CDS, Genomic) from GFF/GTF.
+# Dependencies: gffread, bedtools, awk, sed
+# Author: YourName (2026)
+# ==============================================================================
+
+usage() {
+    echo "Usage: $0 [Options]"
+    echo "Options:"
+    echo "  -p <GFF> <Genome> <Out>   Extract Protein sequences"
+    echo "  -c <GFF> <Genome> <Out>   Extract CDS sequences"
+    echo "  -g <GFF/GTF> <Genome> <Out> Extract Genomic DNA sequences"
+    exit 1
+}
+
+if [ $# -eq 0 ]; then usage; fi
+
+while [ -n "$1" ]
+do
+    case "$1" in
+        -p)
+            echo "Status: Extracting Protein sequences..."
+            gffread "$2" -g "$3" -y "$4"
+            shift 4 ;;
+        -c)
+            echo "Status: Extracting CDS sequences..."
+            gffread "$2" -g "$3" -x "$4"
+            shift 4 ;;
+        -g)
+            echo "Status: Extracting Genomic DNA sequences..."
+            # Core logic: Convert GFF transcript lines to BED6 format
+            awk 'BEGIN{FS="\t"; OFS="\t"} {
+                if($3 == "transcript") {
+                    gsub(/"/, "", $9); 
+                    split($9, a, ";"); 
+                    id = a[1]; 
+                    sub(/ID=/, "", id);
+                    print $1, $4-1, $5, id, ".", $7
+                }
+            }' "$2" > .temp_gene.bed
+            
+            # Use bedtools to fetch fasta with strand awareness
+            bedtools getfasta -name -s -fi "$3" -bed .temp_gene.bed > "$4"
+            rm -f .temp_gene.bed
+            shift 4 ;;
+        *)
+            usage ;;
+    esac
+done
+echo "Done!"
