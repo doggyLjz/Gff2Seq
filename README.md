@@ -15,7 +15,7 @@ A lightweight and efficient bioinformatics tool to extract sequences (Protein, C
 
 ## Installation
 ```bash
-git clone [https://github.com/YourUsername/Gff2Seq.git](https://github.com/YourUsername/Gff2Seq.git)
+git clone https://github.com/doggyLjz/Gff2Seq.git
 cd Gff2Seq/bin
 chmod +x Gff2Seq
 export PATH=$PATH:$(pwd)
